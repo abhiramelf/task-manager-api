@@ -34,6 +34,13 @@
             "title": "Run 15km",
             "description": "Run on the local trail for 15km",
             "completed": false
+        },
+        {
+            "id": 6,
+            "priority": "medium",
+            "title": "Sleep at 10PM",
+            "description": "Make sure to go to bed at 10PM",
+            "completed": true
         }
     ]
 }

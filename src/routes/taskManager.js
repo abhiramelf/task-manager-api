@@ -2,6 +2,7 @@
 const express = require('express')
 const taskRoutes = require('express').Router();
 const taskData = require('../taskData.json');
+const validator = require('../helpers/validator');
 const path = require('path');
 const fs = require('fs');
 
@@ -63,15 +64,20 @@ taskRoutes.get("/priority/:level", (req, res) => {
     res.status(200).send(taskDataModified);
 });
 
-// Create a task
+// Create a task with proper validations
 taskRoutes.post("/", (req, res) => {
     let taskDetails = req.body;
     let writePath = path.join(__dirname, '..', 'taskData.json');
 
-    let taskDataModified = JSON.parse(JSON.stringify(taskData));
-    taskDataModified.tasks.push(taskDetails);
-    fs.writeFileSync(writePath, JSON.stringify(taskDataModified), {encoding:'utf8', flag:'w'});
-    res.status(200).send(taskDataModified);
+    if(validator.validateTaskInfo(taskDetails, taskData).status) {
+        let taskDataModified = JSON.parse(JSON.stringify(taskData));
+        taskDataModified.tasks.push(taskDetails);
+        fs.writeFileSync(writePath, JSON.stringify(taskDataModified), {encoding:'utf8', flag:'w'});
+        res.status(200).json(validator.validateTaskInfo(taskDetails, taskData));
+    }
+    else {
+        res.status(400).json(validator.validateTaskInfo(taskDetails, taskData))
+    }
 });
 
 // Update a task by it's id
@@ -80,10 +86,16 @@ taskRoutes.put("/:id", (req, res) => {
     let reqTaskID = req.params.id;
     let writePath = path.join(__dirname, '..', 'taskData.json');
 
-    let taskDataModified = JSON.parse(JSON.stringify(taskData));
-    taskDataModified.tasks[reqTaskID - 1] = taskDetails;
-    fs.writeFileSync(writePath, JSON.stringify(taskDataModified), {encoding:'utf8', flag:'w'});
-    res.status(200).send(taskDataModified);
+    if (validator.validateUpdateTaskInfo(taskDetails).status) {
+        let taskDataModified = JSON.parse(JSON.stringify(taskData));
+        taskDataModified.tasks[reqTaskID - 1] = taskDetails;
+        fs.writeFileSync(writePath, JSON.stringify(taskDataModified), {encoding:'utf8', flag:'w'});
+        res.status(200).json(validator.validateUpdateTaskInfo(taskDetails));
+    }
+    else {
+        res.status(400).json(validator.validateUpdateTaskInfo(taskDetails));
+    }
+    
 });
 
 // Delete a task by it's id
