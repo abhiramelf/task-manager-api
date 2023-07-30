@@ -2,30 +2,35 @@
     "tasks": [
         {
             "id": 1,
+            "priority": "medium",
             "title": "Get gorceries",
             "description": "Get groceries for the week",
             "completed": false
         },
         {
             "id": 2,
+            "priority": "high",
             "title": "Finish project",
             "description": "Complete this week's project and submit",
             "completed": true
         },
         {
             "id": 3,
+            "priority": "medium",
             "title": "Learn JS",
             "description": "Learn fundamental JS",
             "completed": false
         },
         {
             "id": 4,
+            "priority": "low",
             "title": "Hike for 15km",
             "description": "Hike on the local trail for 15km",
             "completed": false
         },
         {
             "id": 5,
+            "priority": "low",
             "title": "Run 15km",
             "description": "Run on the local trail for 15km",
             "completed": false
